@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Defence Surveillance System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #050b10;
+            color: #e8f5e9;
+        }
+
+        header {
+            background: #07151c;
+            border-bottom: 1px solid #174d42;
+            padding: 18px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #00ff88;
+            font-size: 24px;
+        }
+
+        .system-status {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        /* ALERT BANNER */
+
+        #alertBanner {
+            display: none;
+            background: #450909;
+            border: 2px solid #ff3030;
+            color: #ffffff;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            animation: alertPulse 1s infinite;
+        }
+
+        #alertBanner h2 {
+            margin: 0 0 8px 0;
+            color: #ff4040;
+        }
+
+        #alertMessage {
+            margin-bottom: 10px;
+        }
+
+        @keyframes alertPulse {
+            0% {
+                box-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 25px rgba(255, 0, 0, 0.8);
+            }
+
+            100% {
+                box-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+            }
+        }
+
+        /* STATUS CARDS */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: #0a171e;
+            border: 1px solid #174d42;
+            border-radius: 8px;
+            padding: 18px;
+        }
+
+        .card-title {
+            color: #8aa99f;
+            font-size: 14px;
+        }
+
+        .card-value {
+            font-size: 28px;
+            margin-top: 8px;
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .alert-value {
+            color: #ff4040;
+        }
+
+        /* MAIN GRID */
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            background: #08141b;
+            border: 1px solid #174d42;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            color: #00ff88;
+            font-size: 18px;
+        }
+
+        /* RADAR */
+
+        #radarCanvas {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            display: block;
+            margin: auto;
+            background: #020807;
+            border-radius: 50%;
+        }
+
+        /* CAMERA */
+
+        .camera {
+            width: 100%;
+            border-radius: 6px;
+            border: 1px solid #174d42;
+        }
+
+        /* TABLE */
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #0d2520;
+            color: #00ff88;
+            padding: 10px;
+            text-align: left;
+        }
+
+        td {
+            padding: 9px;
+            border-bottom: 1px solid #17352f;
+        }
+
+        .normal {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .danger {
+            color: #ff4040;
+            font-weight: bold;
+        }
+
+        /* BUTTON */
+
+        button {
+            background: #073d2d;
+            color: #00ff88;
+            border: 1px solid #00ff88;
+            padding: 9px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #0b6045;
+        }
+
+        /* MAP */
+
+        #map {
+            position: relative;
+            height: 300px;
+            background:
+                linear-gradient(rgba(0,255,136,0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,136,0.08) 1px, transparent 1px);
+            background-size: 30px 30px;
+            border: 1px solid #174d42;
+            overflow: hidden;
+        }
+
+        .map-center {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 15px;
+            height: 15px;
+            background: #00ff88;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #00ff88;
+        }
+
+        .map-target {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff88;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        .map-alert {
+            background: #ff3030;
+            box-shadow: 0 0 15px #ff3030;
+        }
+
+        /* ALERT LIST */
+
+        .alert-item {
+            background: #260b0b;
+            border-left: 4px solid #ff3030;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+        }
+
+        .alert-item strong {
+            color: #ff4040;
+        }
+
+        .no-alert {
+            color: #00ff88;
+            padding: 10px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <h1>
+        DEFENCE SURVEILLANCE SYSTEM
+    </h1>
+
+    <div style="
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    ">
+
+        <div class="system-status">
+            ● SYSTEM ONLINE
+        </div>
+        <a
+    href="/about"
+    style="
+        background: #073d2d;
+        color: #00ff88;
+        border: 1px solid #00ff88;
+        padding: 8px 14px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+    "
+>
+    ABOUT PROJECT
+</a>
+        <a
+            href="/logout"
+            style="
+                background: #300909;
+                color: #ff6060;
+                border: 1px solid #ff4040;
+                padding: 8px 14px;
+                border-radius: 5px;
+                text-decoration: none;
+                font-weight: bold;
+            "
+        >
+            LOGOUT
+        </a>
+
+    </div>
+
+</header>
+
+    
+
+
+<div class="container">
+
+    <!-- ALERT BANNER -->
+
+    <div id="alertBanner">
+
+        <h2>⚠️ SURVEILLANCE ALERT</h2>
+
+        <div id="alertMessage">
+            Alert detected.
+        </div>
+
+        <button onclick="hideAlertBanner()">
+            DISMISS
+        </button>
+
+    </div>
+
+
+    <!-- STATUS CARDS -->
+
+    <div class="cards">
+
+        <div class="card">
+
+            <div class="card-title">
+                TOTAL DETECTIONS
+            </div>
+
+            <div
+                class="card-value"
+                id="totalDetections">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                NORMAL
+            </div>
+
+            <div
+                class="card-value"
+                id="normalDetections">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                ALERTS
+            </div>
+
+            <div
+                class="card-value alert-value"
+                id="alertDetections">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                MAX SPEED
+            </div>
+
+            <div
+                class="card-value"
+                id="maximumSpeed">
+                0
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAIN GRID -->
+
+    <div class="main-grid">
+
+        <!-- RADAR -->
+
+        <div class="panel">
+
+            <h2>
+                🟢 LIVE SIMULATED RADAR
+            </h2>
+
+            <canvas
+                id="radarCanvas"
+                width="600"
+                height="600">
+            </canvas>
+
+        </div>
+
+
+        <!-- CAMERA -->
+
+        <div class="panel">
+
+            <h2>
+                📹 SURVEILLANCE CAMERA
+            </h2>
+
+            <img
+                src="/camera"
+                class="camera"
+                alt="Surveillance Camera">
+
+        </div>
+
+    </div>
+
+
+    <!-- ALERTS -->
+
+    <div class="panel">
+
+        <h2>
+            🚨 ACTIVE ALERTS
+        </h2>
+
+        <button onclick="clearAlerts()">
+            CLEAR ALERTS
+        </button>
+
+        <div
+            id="alertsList"
+            style="margin-top:15px;">
+        </div>
+
+    </div>
+
+
+    <!-- MAP -->
+
+    <div class="panel">
+
+        <h2>
+            🗺️ SIMULATED SURVEILLANCE MAP
+        </h2>
+
+        <div id="map">
+
+            <div class="map-center"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TARGET TABLE -->
+
+    <div class="panel">
+
+        <h2>
+            🎯 TRACKED OBJECTS
+        </h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Distance</th>
+                        <th>Speed</th>
+                        <th>Angle</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="targetTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+
+    <div class="panel">
+
+        <h2>
+            📊 SYSTEM STATISTICS
+        </h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <tbody>
+
+                    <tr>
+                        <td>Average Speed</td>
+                        <td id="averageSpeed">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>Average Distance</td>
+                        <td id="averageDistance">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>Maximum Speed</td>
+                        <td id="maximumSpeed2">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>Total Records</td>
+                        <td id="totalRecords">0</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- HISTORY -->
+
+    <div class="panel">
+        <div style="margin-bottom: 15px;">
+
+    <a
+        href="/export/csv"
+        style="
+            display: inline-block;
+            background: #073d2d;
+            color: #00ff88;
+            border: 1px solid #00ff88;
+            padding: 10px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        "
+    >
+        📥 EXPORT CSV REPORT
+    </a>
+
+</div>
+        <h2>
+            📋 DETECTION HISTORY
+        </h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Target</th>
+                        <th>Distance</th>
+                        <th>Speed</th>
+                        <th>Angle</th>
+                        <th>Status</th>
+                        <th>Time</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="historyTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* =========================================
+       RADAR VARIABLES
+    ========================================= */
+
+    const canvas = document.getElementById("radarCanvas");
+
+    const ctx = canvas.getContext("2d");
+
+    let radarTargets = [];
+
+    let radarAngle = 0;
+
+
+    /* =========================================
+       TARGET MOVEMENT
+    ========================================= */
+
+    function initializeTargetMovement(targets) {
+
+        targets.forEach(target => {
+
+            let existing = radarTargets.find(
+                t => t.id === target.id
+            );
+
+            if (existing) {
+
+                existing.speed = target.speed;
+                existing.status = target.status;
+
+            } else {
+
+                radarTargets.push({
+                    id: target.id,
+                    distance: target.distance,
+                    angle: target.angle,
+                    speed: target.speed,
+                    status: target.status
+                });
+
+            }
+
+        });
+
+    }
+
+
+    function moveRadarTargets() {
+
+        radarTargets.forEach(target => {
+
+            target.angle +=
+                (Math.random() - 0.5) * 1.6;
+
+            target.distance +=
+                (Math.random() - 0.5) * 4;
+
+            if (target.angle < 0) {
+                target.angle += 360;
+            }
+
+            if (target.angle >= 360) {
+                target.angle -= 360;
+            }
+
+            if (target.distance < 100) {
+                target.distance = 100;
+            }
+
+            if (target.distance > 1500) {
+                target.distance = 1500;
+            }
+
+        });
+
+    }
+
+
+    /* =========================================
+       DRAW RADAR
+    ========================================= */
+
+    function drawRadar() {
+
+        const width = canvas.width;
+
+        const height = canvas.height;
+
+        const centerX = width / 2;
+
+        const centerY = height / 2;
+
+        const radius = 260;
+
+
+        ctx.clearRect(
+            0,
+            0,
+            width,
+            height
+        );
+
+
+        /* Background */
+
+        ctx.fillStyle = "#020807";
+
+        ctx.fillRect(
+            0,
+            0,
+            width,
+            height
+        );
+
+
+        /* Radar circles */
+
+        ctx.strokeStyle = "#00aa66";
+
+        ctx.lineWidth = 1;
+
+
+        for (let r = 65; r <= radius; r += 65) {
+
+            ctx.beginPath();
+
+            ctx.arc(
+                centerX,
+                centerY,
+                r,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.stroke();
+
+        }
+
+
+        /* Crosshair */
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            centerX - radius,
+            centerY
+        );
+
+        ctx.lineTo(
+            centerX + radius,
+            centerY
+        );
+
+        ctx.moveTo(
+            centerX,
+            centerY - radius
+        );
+
+        ctx.lineTo(
+            centerX,
+            centerY + radius
+        );
+
+        ctx.stroke();
+
+
+        /* Degree labels */
+
+        ctx.fillStyle = "#00ff88";
+
+        ctx.font = "14px Arial";
+
+        ctx.fillText(
+            "0°",
+            centerX + radius + 10,
+            centerY + 5
+        );
+
+        ctx.fillText(
+            "90°",
+            centerX - 12,
+            centerY - radius - 10
+        );
+
+        ctx.fillText(
+            "180°",
+            centerX - radius - 35,
+            centerY + 5
+        );
+
+        ctx.fillText(
+            "270°",
+            centerX - 15,
+            centerY + radius + 20
+        );
+
+
+        /* Radar sweep */
+
+        radarAngle += 0.025;
+
+        const sweepX =
+            centerX +
+            Math.cos(radarAngle) * radius;
+
+        const sweepY =
+            centerY +
+            Math.sin(radarAngle) * radius;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            centerX,
+            centerY
+        );
+
+        ctx.lineTo(
+            sweepX,
+            sweepY
+        );
+
+        ctx.strokeStyle = "#00ff88";
+
+        ctx.lineWidth = 3;
+
+        ctx.stroke();
+
+
+        /* Moving targets */
+
+        moveRadarTargets();
+
+
+        radarTargets.forEach(target => {
+
+            const angle =
+                target.angle * Math.PI / 180;
+
+
+            const distance =
+                (target.distance / 1500) * radius;
+
+
+            const x =
+                centerX +
+                Math.cos(angle) * distance;
+
+
+            const y =
+                centerY +
+                Math.sin(angle) * distance;
+
+
+            if (target.status === "ALERT") {
+
+                ctx.fillStyle = "#ff3030";
+
+                ctx.shadowColor = "#ff3030";
+
+            } else {
+
+                ctx.fillStyle = "#00ff88";
+
+                ctx.shadowColor = "#00ff88";
+
+            }
+
+
+            ctx.shadowBlur = 15;
+
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x,
+                y,
+                7,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+
+            ctx.shadowBlur = 0;
+
+
+            ctx.fillStyle =
+                target.status === "ALERT"
+                    ? "#ff4040"
+                    : "#00ff88";
+
+
+            ctx.font = "12px Arial";
+
+
+            ctx.fillText(
+                "T-" + target.id,
+                x + 10,
+                y
+            );
+
+        });
+
+
+        /* Center */
+
+        ctx.fillStyle = "#00ff88";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            centerX,
+            centerY,
+            5,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+
+
+        requestAnimationFrame(drawRadar);
+
+    }
+
+
+    /* =========================================
+       LOAD TARGETS
+    ========================================= */
+
+    async function loadTargets() {
+
+        try {
+
+            const response =
+                await fetch("/api/targets");
+
+            const targets =
+                await response.json();
+
+
+            initializeTargetMovement(targets);
+
+
+            const table =
+                document.getElementById(
+                    "targetTable"
+                );
+
+
+            table.innerHTML = "";
+
+
+            targets.forEach(target => {
+
+                const row =
+                    document.createElement("tr");
+
+
+                const statusClass =
+                    target.status === "ALERT"
+                        ? "danger"
+                        : "normal";
+
+
+                row.innerHTML = `
+
+                    <td>
+                        T-${target.id}
+                    </td>
+
+                    <td>
+                        ${target.distance} m
+                    </td>
+
+                    <td>
+                        ${target.speed} m/s
+                    </td>
+
+                    <td>
+                        ${target.angle}°
+                    </td>
+
+                    <td class="${statusClass}">
+                        ${target.status}
+                    </td>
+
+                `;
+
+
+                table.appendChild(row);
+
+            });
+
+
+            updateMap(targets);
+
+            checkForNewAlert(targets);
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Target loading error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =========================================
+       ALERT DETECTION
+    ========================================= */
+
+    let lastAlertId = null;
+
+
+    function checkForNewAlert(targets) {
+
+        const alertTargets =
+            targets.filter(
+                target =>
+                    target.status === "ALERT"
+            );
+
+
+        if (alertTargets.length === 0) {
+
+            return;
+
+        }
+
+
+        const newestAlert =
+            alertTargets[0];
+
+
+        if (
+            lastAlertId !==
+            newestAlert.id +
+            "-" +
+            newestAlert.speed
+        ) {
+
+            lastAlertId =
+                newestAlert.id +
+                "-" +
+                newestAlert.speed;
+
+
+            showAlertBanner(
+                newestAlert
+            );
+
+        }
+
+    }
+
+
+    function showAlertBanner(target) {
+
+        const banner =
+            document.getElementById(
+                "alertBanner"
+            );
+
+
+        const message =
+            document.getElementById(
+                "alertMessage"
+            );
+
+
+        message.innerHTML = `
+
+            <strong>
+                Target T-${target.id}
+            </strong>
+            detected in simulation.
+
+            <br><br>
+
+            Distance:
+            ${target.distance} m
+
+            <br>
+
+            Speed:
+            ${target.speed} m/s
+
+            <br>
+
+            Angle:
+            ${target.angle}°
+
+        `;
+
+
+        banner.style.display = "block";
+
+
+        /* Browser notification sound */
+
+        playAlertSound();
+
+    }
+
+
+    function hideAlertBanner() {
+
+        document.getElementById(
+            "alertBanner"
+        ).style.display = "none";
+
+    }
+
+
+    /* =========================================
+       SAFE ALERT SOUND
+    ========================================= */
+
+    function playAlertSound() {
+
+        try {
+
+            const AudioContext =
+                window.AudioContext ||
+                window.webkitAudioContext;
+
+
+            if (!AudioContext) {
+                return;
+            }
+
+
+            const audioContext =
+                new AudioContext();
+
+
+            const oscillator =
+                audioContext.createOscillator();
+
+
+            const gain =
+                audioContext.createGain();
+
+
+            oscillator.frequency.value = 700;
+
+            oscillator.type = "sine";
+
+
+            gain.gain.setValueAtTime(
+                0.15,
+                audioContext.currentTime
+            );
+
+
+            oscillator.connect(gain);
+
+            gain.connect(
+                audioContext.destination
+            );
+
+
+            oscillator.start();
+
+
+            oscillator.stop(
+                audioContext.currentTime + 0.25
+            );
+
+        }
+
+        catch (error) {
+
+            console.log(
+                "Audio notification unavailable."
+            );
+
+        }
+
+    }
+
+
+    /* =========================================
+       MAP
+    ========================================= */
+
+    function updateMap(targets) {
+
+        const map =
+            document.getElementById("map");
+
+
+        const oldTargets =
+            map.querySelectorAll(
+                ".map-target"
+            );
+
+
+        oldTargets.forEach(
+            target => target.remove()
+        );
+
+
+        targets.forEach(target => {
+
+            const point =
+                document.createElement("div");
+
+
+            point.className =
+                "map-target";
+
+
+            if (
+                target.status === "ALERT"
+            ) {
+
+                point.classList.add(
+                    "map-alert"
+                );
+
+            }
+
+
+            point.style.left =
+                Math.random() * 90 + 5 + "%";
+
+
+            point.style.top =
+                Math.random() * 80 + 10 + "%";
+
+
+            map.appendChild(point);
+
+        });
+
+    }
+
+
+    /* =========================================
+       STATISTICS
+    ========================================= */
+
+    async function loadStatistics() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/statistics"
+                );
+
+
+            const data =
+                await response.json();
+
+
+            document.getElementById(
+                "totalDetections"
+            ).textContent =
+                data.total_detections;
+
+
+            document.getElementById(
+                "normalDetections"
+            ).textContent =
+                data.normal_detections;
+
+
+            document.getElementById(
+                "alertDetections"
+            ).textContent =
+                data.alert_detections;
+
+
+            document.getElementById(
+                "maximumSpeed"
+            ).textContent =
+                data.maximum_speed +
+                " m/s";
+
+
+            document.getElementById(
+                "averageSpeed"
+            ).textContent =
+                data.average_speed +
+                " m/s";
+
+
+            document.getElementById(
+                "averageDistance"
+            ).textContent =
+                data.average_distance +
+                " m";
+
+
+            document.getElementById(
+                "maximumSpeed2"
+            ).textContent =
+                data.maximum_speed +
+                " m/s";
+
+
+            document.getElementById(
+                "totalRecords"
+            ).textContent =
+                data.total_detections;
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Statistics error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =========================================
+       HISTORY
+    ========================================= */
+
+    async function loadHistory() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/history"
+                );
+
+
+            const logs =
+                await response.json();
+
+
+            const table =
+                document.getElementById(
+                    "historyTable"
+                );
+
+
+            table.innerHTML = "";
+
+
+            logs.forEach(log => {
+
+                const row =
+                    document.createElement("tr");
+
+
+                const statusClass =
+                    log.status === "ALERT"
+                        ? "danger"
+                        : "normal";
+
+
+                row.innerHTML = `
+
+                    <td>
+                        ${log.database_id}
+                    </td>
+
+                    <td>
+                        T-${log.target_id}
+                    </td>
+
+                    <td>
+                        ${log.distance} m
+                    </td>
+
+                    <td>
+                        ${log.speed} m/s
+                    </td>
+
+                    <td>
+                        ${log.angle}°
+                    </td>
+
+                    <td class="${statusClass}">
+                        ${log.status}
+                    </td>
+
+                    <td>
+                        ${log.time}
+                    </td>
+
+                `;
+
+
+                table.appendChild(row);
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "History error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =========================================
+       ALERT LIST
+    ========================================= */
+
+    async function loadAlerts() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/alerts"
+                );
+
+
+            const alerts =
+                await response.json();
+
+
+            const list =
+                document.getElementById(
+                    "alertsList"
+                );
+
+
+            list.innerHTML = "";
+
+
+            if (alerts.length === 0) {
+
+                list.innerHTML =
+                    '<div class="no-alert">✓ No active alerts</div>';
+
+                return;
+
+            }
+
+
+            alerts.slice().reverse().forEach(
+                alert => {
+
+                    const item =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    item.className =
+                        "alert-item";
+
+
+                    item.innerHTML = `
+
+                        <strong>
+                            ALERT — Target T-${alert.target_id}
+                        </strong>
+
+                        <br>
+
+                        Speed:
+                        ${alert.speed} m/s
+
+                        <br>
+
+                        Distance:
+                        ${alert.distance} m
+
+                        <br>
+
+                        Angle:
+                        ${alert.angle}°
+
+                        <br>
+
+                        Time:
+                        ${alert.time}
+
+                    `;
+
+
+                    list.appendChild(item);
+
+                }
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Alert loading error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =========================================
+       CLEAR ALERTS
+    ========================================= */
+
+    async function clearAlerts() {
+
+        try {
+
+            await fetch(
+                "/api/alerts/clear",
+                {
+                    method: "POST"
+                }
+            );
+
+
+            loadAlerts();
+
+
+            hideAlertBanner();
+
+
+            lastAlertId = null;
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Clear alert error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =========================================
+       START RADAR
+    ========================================= */
+
+    drawRadar();
+
+
+    /* =========================================
+       AUTO REFRESH
+    ========================================= */
+
+    loadTargets();
+
+    loadStatistics();
+
+    loadHistory();
+
+    loadAlerts();
+
+
+    setInterval(
+        loadTargets,
+        2000
+    );
+
+
+    setInterval(
+        loadStatistics,
+        5000
+    );
+
+
+    setInterval(
+        loadHistory,
+        5000
+    );
+
+
+    setInterval(
+        loadAlerts,
+        5000
+    );
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>About | Defence Surveillance</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #050b10;
+            color: #e8f5e9;
+        }
+
+        header {
+            background: #07151c;
+            border-bottom: 1px solid #174d42;
+            padding: 18px 25px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #00ff88;
+            font-size: 23px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 35px 20px;
+            border: 1px solid #174d42;
+            border-radius: 10px;
+            background: #08141b;
+            margin-bottom: 25px;
+        }
+
+        .hero-icon {
+            font-size: 55px;
+        }
+
+        .hero h2 {
+            color: #00ff88;
+            font-size: 30px;
+            margin: 10px 0;
+        }
+
+        .hero p {
+            color: #91aaa1;
+            max-width: 750px;
+            margin: auto;
+            line-height: 1.7;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: #08141b;
+            border: 1px solid #174d42;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .card h3 {
+            color: #00ff88;
+            margin-top: 0;
+        }
+
+        .card p {
+            color: #91aaa1;
+            line-height: 1.6;
+        }
+
+        .workflow {
+            background: #08141b;
+            border: 1px solid #174d42;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .flow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .flow-box {
+            background: #0b2520;
+            border: 1px solid #00aa66;
+            color: #00ff88;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .arrow {
+            color: #00ff88;
+            font-size: 22px;
+        }
+
+        .tech {
+            background: #08141b;
+            border: 1px solid #174d42;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .tech-item {
+            background: #0b2520;
+            border: 1px solid #28624f;
+            color: #00ff88;
+            padding: 9px 14px;
+            border-radius: 5px;
+        }
+
+        .notice {
+            background: #241c08;
+            border: 1px solid #9a7518;
+            color: #e8d99a;
+            border-radius: 8px;
+            padding: 18px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 11px 18px;
+            margin: 5px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .primary {
+            background: #073d2d;
+            color: #00ff88;
+            border: 1px solid #00ff88;
+        }
+
+        .secondary {
+            background: #300909;
+            color: #ff6060;
+            border: 1px solid #ff4040;
+        }
+
+        footer {
+            text-align: center;
+            color: #607a71;
+            padding: 25px;
+            border-top: 1px solid #17352f;
+        }
+
+        @media (max-width: 800px) {
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>
+        🛡️ DEFENCE SURVEILLANCE
+    </h1>
+
+    <a
+        href="/"
+        class="button primary"
+    >
+        DASHBOARD
+    </a>
+
+</header>
+
+
+<div class="container">
+
+
+    <section class="hero">
+
+        <div class="hero-icon">
+            🛡️
+        </div>
+
+        <h2>
+            Defence Surveillance Simulator
+        </h2>
+
+        <p>
+            A software-based academic project that
+            demonstrates simulated radar monitoring,
+            object tracking, camera-based motion
+            detection, alert management, database
+            logging and report generation through
+            a web dashboard.
+        </p>
+
+    </section>
+
+
+    <div class="grid">
+
+
+        <div class="card">
+
+            <h3>
+                📡 Simulated Radar
+            </h3>
+
+            <p>
+                Displays synthetic targets on an
+                animated radar interface and
+                demonstrates continuous target
+                monitoring.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                🎯 Object Tracking
+            </h3>
+
+            <p>
+                Maintains simulated target information
+                such as distance, speed, angle and
+                monitoring status.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                📹 Camera Detection
+            </h3>
+
+            <p>
+                Uses OpenCV background subtraction
+                to demonstrate motion-based object
+                detection from a connected camera.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                🚨 Alert Management
+            </h3>
+
+            <p>
+                Generates visual alerts when simulated
+                target conditions cross the configured
+                demonstration threshold.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                🗄️ Database
+            </h3>
+
+            <p>
+                SQLite stores simulated detection
+                records including distance, speed,
+                angle, status and timestamp.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                📥 Report Generation
+            </h3>
+
+            <p>
+                Detection history can be exported
+                as a CSV report for analysis and
+                project demonstration.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <section class="workflow">
+
+        <h2 style="color:#00ff88;">
+            SYSTEM WORKFLOW
+        </h2>
+
+        <div class="flow">
+
+            <div class="flow-box">
+                📡 Radar
+            </div>
+
+            <div class="arrow">
+                →
+            </div>
+
+            <div class="flow-box">
+                🎯 Tracking
+            </div>
+
+            <div class="arrow">
+                →
+            </div>
+
+            <div class="flow-box">
+                🚨 Alerts
+            </div>
+
+            <div class="arrow">
+                →
+            </div>
+
+            <div class="flow-box">
+                🗄️ Database
+            </div>
+
+            <div class="arrow">
+                →
+            </div>
+
+            <div class="flow-box">
+                📊 Dashboard
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="tech">
+
+        <h2 style="color:#00ff88;">
+            TECHNOLOGIES USED
+        </h2>
+
+        <div class="tech-list">
+
+            <div class="tech-item">
+                Python
+            </div>
+
+            <div class="tech-item">
+                Flask
+            </div>
+
+            <div class="tech-item">
+                OpenCV
+            </div>
+
+            <div class="tech-item">
+                NumPy
+            </div>
+
+            <div class="tech-item">
+                SQLite
+            </div>
+
+            <div class="tech-item">
+                HTML5
+            </div>
+
+            <div class="tech-item">
+                CSS3
+            </div>
+
+            <div class="tech-item">
+                JavaScript
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="notice">
+
+        <strong>
+            ⚠️ Academic Simulation Notice
+        </strong>
+
+        <br><br>
+
+        This application is an educational software
+        simulator. Radar targets, measurements and
+        alerts are synthetic demonstration data.
+        The system is intended for learning about
+        software engineering, computer vision,
+        databases and web application development.
+
+    </section>
+
+
+    <div class="buttons">
+
+        <a
+            href="/"
+            class="button primary"
+        >
+            ← BACK TO DASHBOARD
+        </a>
+
+        <a
+            href="/logout"
+            class="button secondary"
+        >
+            LOGOUT
+        </a>
+
+    </div>
+
+</div>
+
+
+<footer>
+
+    Defence Surveillance Simulator
+    <br>
+    Academic CSE Project
+
+</footer>
+
+
+</body>
+
+</html>

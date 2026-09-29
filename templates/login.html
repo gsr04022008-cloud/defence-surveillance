@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Defence Surveillance Login</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-family: Arial, sans-serif;
+
+            background: #050b10;
+
+            color: #e8f5e9;
+
+        }
+
+
+        .login-container {
+
+            width: 400px;
+
+            max-width: 90%;
+
+            background: #08141b;
+
+            border: 1px solid #174d42;
+
+            border-radius: 10px;
+
+            padding: 35px;
+
+            box-shadow:
+                0 0 30px
+                rgba(0, 255, 136, 0.15);
+
+        }
+
+
+        .logo {
+
+            text-align: center;
+
+            font-size: 45px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        h1 {
+
+            text-align: center;
+
+            color: #00ff88;
+
+            font-size: 22px;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .subtitle {
+
+            text-align: center;
+
+            color: #7e9b92;
+
+            margin-bottom: 30px;
+
+        }
+
+
+        label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #9bb7ad;
+
+        }
+
+
+        input {
+
+            width: 100%;
+
+            padding: 12px;
+
+            margin-bottom: 18px;
+
+            background: #050b10;
+
+            border: 1px solid #28574b;
+
+            border-radius: 5px;
+
+            color: white;
+
+            font-size: 15px;
+
+            outline: none;
+
+        }
+
+
+        input:focus {
+
+            border-color: #00ff88;
+
+            box-shadow:
+                0 0 8px
+                rgba(0, 255, 136, 0.2);
+
+        }
+
+
+        button {
+
+            width: 100%;
+
+            padding: 12px;
+
+            background: #073d2d;
+
+            color: #00ff88;
+
+            border: 1px solid #00ff88;
+
+            border-radius: 5px;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        button:hover {
+
+            background: #0b6045;
+
+        }
+
+
+        .error {
+
+            background: #300909;
+
+            border: 1px solid #ff4040;
+
+            color: #ff7070;
+
+            padding: 10px;
+
+            border-radius: 5px;
+
+            margin-bottom: 18px;
+
+            text-align: center;
+
+        }
+
+
+        .demo {
+
+            margin-top: 25px;
+
+            padding: 12px;
+
+            background: #0b191f;
+
+            border: 1px solid #173d34;
+
+            border-radius: 5px;
+
+            font-size: 13px;
+
+            color: #8aa99f;
+
+        }
+
+
+        .demo strong {
+
+            color: #00ff88;
+
+        }
+
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #607a71;
+
+            font-size: 12px;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="login-container">
+
+
+    <div class="logo">
+        🛡️
+    </div>
+
+
+    <h1>
+        DEFENCE SURVEILLANCE
+    </h1>
+
+
+    <div class="subtitle">
+        Secure Monitoring System
+    </div>
+
+
+    {% if error %}
+
+    <div class="error">
+        {{ error }}
+    </div>
+
+    {% endif %}
+
+
+    <form
+        method="POST"
+        action="/login"
+    >
+
+
+        <label>
+            Username
+        </label>
+
+
+        <input
+            type="text"
+            name="username"
+            placeholder="Enter username"
+            required
+        >
+
+
+        <label>
+            Password
+        </label>
+
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Enter password"
+            required
+        >
+
+
+        <button type="submit">
+            LOGIN
+        </button>
+
+
+    </form>
+
+
+    <div class="demo">
+
+        <strong>Demo Login</strong>
+
+        <br><br>
+
+        Username:
+        <strong>admin</strong>
+
+        <br>
+
+        Password:
+        <strong>admin123</strong>
+
+    </div>
+
+
+    <div class="footer">
+
+        Defence Surveillance Simulator
+
+        <br>
+
+        Academic Project
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>
